@@ -22,14 +22,14 @@ function verifyToken(req, res, next) {
 
 function validateRegister(req, res, next) {
     const password = req.body.password;
-    let hasUpperCase = false;
-    if (!password) {
-      return res.status(400).send({
-        message: 'Password is required',
-      });
-    }
+    // let hasUpperCase = false;
+    // if (!password) {
+    //   return res.status(400).send({
+    //     message: 'Password is required',
+    //   });
+    // }
   
-    //const isLongEnough = password.length >= 8;
+    // const isLongEnough = password.length >= 8;
     // for (let i = 0; i < password.length; i++) {
     //   const char = password[i];
 
@@ -44,12 +44,12 @@ function validateRegister(req, res, next) {
     //   });
     // }
 
-    if (!req.body.password || req.body.password.length < 8) {
-      return res.status(400).send({
+  if (!req.body.password || req.body.password.length < 8) {
+     return res.status(400).send({
         message: 'Please enter a password with min. 8 chars',
-      });
-    }
-    next();
+    });
+  }
+  next();
 }
 
 

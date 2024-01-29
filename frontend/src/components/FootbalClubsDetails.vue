@@ -1,15 +1,14 @@
-<template>
+   <template>
     <div class="footballClub-details-container">
       <h2 class="section-title">Football Club Details</h2>
-  
       <div v-if="footballClubDetails" class="footballClub-details">
         <div class="footballClub-info">
           <h3>{{ footballClubDetails.clubName }}</h3>
           <p class="footballClub-FoundingDate">
-            <strong>Founding Date:</strong> {{ footballClubDetails.foundingDate }}
+            <strong>Founding Date:</strong> {{ footballClubDetails.clubFoundingDate }}
           </p>
           <p class="footballClub-Location">
-            <strong>Location:</strong> {{ footballClubDetails.location }}
+            <strong>Location:</strong> {{ footballClubDetails.clubLocation }}
           </p>
         </div>
   
@@ -17,10 +16,10 @@
           <h3 class="section-title">Football Players</h3>
           <ul class="football-players-list">
             <h3 class="football-players-header">Name - Position - Market Value</h3>
-            <li v-for="member in filteredFootballPlayers" :key="member.id" class="football-player">
-              {{ member.name }}  -  {{ member.position }}  -   {{ member.marketValue }}
+            <li v-for="player in filteredFootballPlayers" :key="player.id" class="football-player">
+              {{ player.name }}  -  {{ player.position }}  -   {{ player.marketValue }}
               <div class="action-buttons">
-                <button v-if="isAuthenticated" @click="deleteFootballPlayer(member.id)" class="delete-btn">Delete</button>
+                <button v-if="isAuthenticated" @click="deleteFootballPlayer(player.id)" class="delete-btn">Delete</button>
               </div>
             </li>
           </ul>
@@ -30,11 +29,9 @@
               <div class="form-group">
                 <input placeholder="Name" v-model="newFootballPlayer.name" type="text" id="newFootballPlayerName" required>
               </div>
-  
               <div class="form-group">
                 <input placeholder="Position" v-model="newFootballPlayer.position" type="text" id="newFootballPlayerPosition" required>
               </div>
-  
               <div class="form-group">
                 <input placeholder="marketValue" v-model="newFootballPlayer.marketValue" type="number" id="newFootballPlayerMarketValue" required>
               </div>
@@ -43,99 +40,107 @@
           </form>
   
           <button v-if="isAuthenticated" @click="toggleEditForm" class="edit-btn">Edit Football Club</button>
-  
           <form v-if="isEditing" @submit.prevent="editFootballClub" class="edit-footballClub-form">
             <div class="form-group">
               <label for="editFootballClubName">Name:</label>
-              <input v-model="editedFootbalClub.clubName" type="text" id="editFootbalClubName" required>
+              <input v-model="editedFootbalClub.clubName" type="text" id="editFootballClubName" required>
             </div>
-  
             <div class="form-group">
-              <label for="editFootbalClubFoundingDate">Founding Date:</label>
-              <input v-model="editedProject.startDate" type="date" id="editFootbalClubFoundingDate" required>
+              <label for="editFootballClubFoundingDate">Founding Date:</label>
+              <input v-model="editedFootbalClub.clubFoundingDate" type="date" id="editFootballClubFoundingDate" required>
             </div>
-
             <div class="form-group">
-              <label for="editFootbalClubLocation">Location:</label>
-              <input v-model="editedFootbalClub.location" id="editFootbalClublocation" required>
+              <label for="editFootballClubLocation">Location:</label>
+              <input v-model="editedFootbalClub.clubLocation" type="text" id="editFootballClubLocation" required>
             </div>
-  
             <button type="submit" class="add-btn">Save Changes</button>
           </form>
         </div>
       </div>
     </div>
   </template>
-  
   <script>
+  
   import FootbalClubService from '../services/FootbalClubService';
   import FootbalPlayerService from '../services/FootbalPlayerService';
-  
+
   export default {
-    data() {
-      return {
-        footballClubDetails: null,
-        footbalPlayers: [],
-        newFootballPlayer: {
-          name: '',
-          position: '',
-          marketValue: 0,
-        },
-        isEditing: false,
-        editedFootbalClub: {
-          clubName: '',
-          foundingDate: null,
-          location: '',
-        },
-      };
-    },
-    computed: {
-      filteredFootballPlayers() {
-            const footballClubId = this.$route.params.id;
-            return this.footbalPlayers.filter(footbalPlayer => footbalPlayer.clubId === footballClubId);
+  data() {
+    return {
+      footballClubDetails: null,
+      footbalPlayers: [],
+      newFootballPlayer: {
+        name: '',
+        position: '',
+        marketValue: 0,
       },
-  
-      isAuthenticated() {
-        return this.$store.getters.isAuthenticated;
+      isEditing: false,
+      editedFootbalClub: {
+        clubName: '',
+        clubFoundingDate: null,
+        clubLocation: '',
       },
-    },
-  
-    created() {
+    };
+  },
+  computed: {
+    filteredFootballPlayers() {
       const footballClubId = this.$route.params.id;
-      this.fetchFootballClubDetails(footballClubId);
-      this.fetchFootballPlayers();
+      return this.footbalPlayers.filter(player => player.clubId === footballClubId);
     },
-    methods: {
-      toggleEditForm() {
-        this.isEditing = !this.isEditing;
-        this.editedFootbalClub = { ...this.footballClubDetails };
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
-  
-      async fetchFootballClubDetails(id) {
-        try {
-          const response = await FootbalClubService.getFootbalClub(id);
-          this.footballClubDetails = response.data;
-        } catch (error) {
-          console.error('Error fetching football club:', error);
-        }
-      },
-  
+  },
+  created() {
+    const footballClubId = this.$route.params.id;
+    this.fetchFootballClubDetails(footballClubId);
+    this.fetchFootballPlayers();
+  },
+  methods: {
+    toggleEditForm() {
+      this.isEditing = !this.isEditing;
+      this.editedFootbalClub = { ...this.footballClubDetails };
+    },
+    async fetchFootballClubDetails(id) {
+      try {
+        const response = await FootbalClubService.getFootbalClub(id);
+        this.footballClubDetails = response.data;
+      } catch (error) {
+        console.error('Error fetching football club:', error);
+      }
+    },
+    // async editFootballClub() {
+    //   const footballClubId = this.$route.params.id;
+    //   try {
+    //     await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
+    //     this.isEditing = false; 
+    //     this.fetchFootballClubDetails(footballClubId);
+    //   } catch (error) {
+    //     console.error('Error editing football club:', error);
+    //   }
+    // },
       async editFootballClub() {
-        const footballClubId = this.$route.params.id;
-        try {
-          await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
-          this.footballClubDetails = { ...this.editedFootbalClub };
-          this.fetchFootballClubDetails(this.editedFootbalClub.id)
-          this.isEditing = false; 
-        } catch (error) {
-          console.error('Error editing football club:', error);
-        }
-      },
-  
-      async fetchFootballPlayers() {
+    const footballClubId = this.$route.params.id;
+    try {
+      await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
+      this.isEditing = false;
+      this.footballClubDetails = { ...this.editedFootbalClub };
+
+      // Fetch updated football club details
+      await this.fetchFootballClubDetails(footballClubId);
+
+      // Fetch updated list of football players associated with this club
+      await this.fetchFootballPlayers();
+    } catch (error) {
+      console.error('Error editing football club:', error);
+    }
+  },
+
+    async fetchFootballPlayers() {
         try {
           const response = await FootbalPlayerService.getFootbalPlayers();
           this.footbalPlayers = response.data;
+          
         } catch (error) {
           console.error('Error fetching football players:', error);
         }
@@ -144,7 +149,7 @@
       async deleteFootballPlayer(id) {
         try {
           await FootbalPlayerService.deleteFootbalPlayer(id);
-          this.footbalPlayer = this.footbalPlayers.filter(footbalPlayers => footbalPlayers.id !== id);
+          this.footbalPlayers = this.footbalPlayers.filter(footbalPlayers => footbalPlayers.id !== id);
         } catch (error) {
           console.error('Error deleting football player:', error);
         }
@@ -283,4 +288,3 @@
     width: auto; 
   }
   </style>
-  

@@ -28,7 +28,7 @@ export default {
     async login() {
       try {
         const response = await this.$axios
-        .post('/login', {
+        .post('http://localhost:3000/login', {
           email: this.email,
           password: this.password,
         })

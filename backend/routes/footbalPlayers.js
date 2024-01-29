@@ -47,7 +47,7 @@ router.post('/', verifyToken, async(req,res)=> {
   try{
     let docRef=db.collection('footbalPlayers').doc();
     const clubId = req.body.clubId;
-    let footbalClubDataData = 
+    let footbalClubData = 
     { 
         clubName: null,
         clubFoundingDate: null,
@@ -58,10 +58,10 @@ router.post('/', verifyToken, async(req,res)=> {
       const footbalClubDoc = await db.collection('footbalClubs').doc(clubId).get();
 
       if (footbalClubDoc.exists) {
-        footbalClubDataData= {
+        footbalClubData= {
           clubName: footbalClubDoc.data().clubName,
-          clubFoundingDate: footbalClubDoc.data().foundingDate,
-          clubLocation: footbalClubDoc.data().location,
+          clubFoundingDate: footbalClubDoc.data().clubFoundingDate,
+          clubLocation: footbalClubDoc.data().clubLocation,
         }
       }
     }
@@ -76,7 +76,7 @@ router.post('/', verifyToken, async(req,res)=> {
       marketValue: req.body.marketValue,
         
       clubId,
-      ...footbalClubDataData
+      ...footbalClubData
     })
 
     res.json({message: 'Footbal Player added successfully'});

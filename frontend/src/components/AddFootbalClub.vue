@@ -6,10 +6,10 @@
       <input type="text" id="name" v-model="newFootbalClub.clubName" required>
 
        <label for="date">Date:</label>
-      <input type="date" id="date" v-model="newFootbalClub.foundingDate" required>
+      <input type="date" id="date" v-model="newFootbalClub.clubFoundingDate" required>
 
       <label for="location">Location:</label>
-      <textarea id="locaiton" v-model="newFootbalClub.location" required></textarea>
+      <textarea id="locaiton" v-model="newFootbalClub.clubLocation" required></textarea>
 
 
       <button type="submit">Add</button>
@@ -25,8 +25,8 @@ export default {
     return {
       newFootbalClub: {
           clubName: '',
-          foundingDate: null,
-          location: '',
+          clubFoundingDate: null,
+          clubLocation: '',
         }
     };
   },
@@ -37,8 +37,8 @@ export default {
           console.log(response.data.message);
           this.newFootbalClub = {
             clubName: '',
-            foundingDate: null,
-            location: '',
+            clubFoundingDate: null,
+            clubLocation: '',
           };
         })
         .catch(error => {

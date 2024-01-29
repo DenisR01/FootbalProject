@@ -12,19 +12,27 @@ const generateFootbalClubs = (nrOfClubs) => {
     const city = chance.city();
     const maxDate = new Date(2010, 11, 31); 
     const randomPastDate = chance.date({ max: maxDate })
-    
+    const formattedDate = formatDate(randomPastDate);
     const club = {
         clubId: clubId,
         clubName: `${prefix} ${city}`,
-        foundingDate: randomPastDate, // Returns date in YYYY-MM-DD format
-        location: city
+        clubFoundingDate: formattedDate, // Returns date in YYYY-MM-DD format
+        clubLocation: city
     };
+    
 
     clubs.push(club);
   }
 
   return clubs;
 };
+function formatDate(date) {
+  const d = new Date(date);
+  const day = (d.getDate() < 10 ? '0' : '') + d.getDate();
+  const month = (d.getMonth() + 1 < 10 ? '0' : '') + (d.getMonth() + 1); // Months are 0-based
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
+}
 
 const generateFootballPlayers = (nrOfPlayers, clubs) => {
     const footballPlayers = [];
@@ -38,8 +46,8 @@ const generateFootballPlayers = (nrOfPlayers, clubs) => {
             marketValue: chance.integer({ min: 300000, max: 100000000 }),
             clubId: club.clubId,
             clubName: club.clubName,
-            clubFoundingDate: club.foundingDate,
-            clubLocation: club.location
+            clubFoundingDate: club.clubFoundingDate,
+            clubLocation: club.clubLocation
         };
         footballPlayers.push(footballPlayer);
     }
@@ -82,11 +90,11 @@ const addData = async () => {
       await footbalPlayersDocRef.set(footbalPlayer);
     }
 
-    const usersCollectionRef = db.collection('users');
-    for (const user of users) {
-      const userDocRef = usersCollectionRef.doc();
-      await userDocRef.set(user);
-    }
+    // const usersCollectionRef = db.collection('users');
+    // for (const user of users) {
+    //   const userDocRef = usersCollectionRef.doc();
+    //   await userDocRef.set(user);
+    // }
 
     console.log('Data added successfully.');
   } catch (error) {

@@ -47,15 +47,15 @@ router.post('/', verifyToken, async(req,res)=> {
   try{
     let docRef=db.collection('footbalClubs').doc();
 
-    if(!req.body.clubName || !req.body.foundingDate || !req.body.location) {
+    if(!req.body.clubName || !req.body.clubFoundingDate || !req.body.clubFoundingDate) {
       res.json({message:'Footbal Club must contain all data.'})
     }
 
     await docRef.set({
       clubId: docRef.id,
       clubName: req.body.clubName,
-      foundingDate: req.body.foundingDate,
-      location: req.body.location
+      clubFoundingDate: req.body.clubFoundingDate,
+      clubLocation: req.body.clubLocation
     })
 
     res.json({message: 'Footbal Club added successfully'});
@@ -71,14 +71,14 @@ router.put('/:id', verifyToken, async(req,res)=> {
     const id = req.params.id;
     let docRef = db.collection('footbalClubs').doc(id);
 
-    if(!req.body.clubName || !req.body.foundingDate || !req.body.location) {
+    if(!req.body.clubName || !req.body.clubFoundingDate || !req.body.clubLocation) {
       res.json({message:'Footbal Club must contain all data.'})
     }
 
     await docRef.update({
       clubName: req.body.clubName,
-      foundingDate: req.body.foundingDate,
-      location: req.body.location
+      clubFoundingDate: req.body.clubFoundingDate,
+      clubLocation: req.body.clubLocation
     })
 
     
