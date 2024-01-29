@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const footbalPlayersSnapshot = await db.collection('footbalPlayers').get();
     const footbalPlayers = [];
     footbalPlayersSnapshot.forEach((doc) => {
-      clubs.push({
+      footbalPlayers.push({
         id: doc.id,
         ...doc.data()
       });
