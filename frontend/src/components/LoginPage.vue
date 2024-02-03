@@ -111,7 +111,7 @@ input {
       <!-- Adjust column size based on the screen size -->
       <v-col cols="12" sm="10" md="8" lg="6" xl="4">
         <v-card class="pa-5" elevation="2">
-          <v-card-title class="text-h5 text-center">Login</v-card-title>
+          <v-card-title class="login">Login</v-card-title>
           <v-card-text>
             <v-form @submit.prevent="login">
               <v-text-field

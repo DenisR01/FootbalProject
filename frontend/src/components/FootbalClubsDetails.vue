@@ -1,4 +1,4 @@
-   <template>
+   <!-- <template>
     <div class="footballClub-details-container">
       <h2 class="section-title">Football Club Details</h2>
       <div v-if="footballClubDetails" class="footballClub-details">
@@ -65,7 +65,75 @@
         </div>
       </div>
     </div>
+  </template> -->
+
+  <template>
+    <v-container class="footballClub-details-container">
+      <v-row>
+        <v-col cols="12">
+          <h2 class="section-title">Football Club Details</h2>
+  
+          <v-card v-if="footballClubDetails" class="footballClubDetails">
+            <v-card-title>{{ footballClubDetails.clubName }}</v-card-title>
+            <v-card-text>
+              <p><strong>Founding Date:</strong> {{ footballClubDetails.clubFoundingDate }}</p>
+              <p><strong>Location:</strong> {{ footballClubDetails.clubLocation }}</p>
+            </v-card-text>
+  
+            <v-divider class="footballClubDetails"></v-divider>
+  
+            <div class="footballPlayers-section">
+              <h3>Football Players</h3>
+              <v-list>
+                <v-list-item v-for="player in filteredFootballPlayers" :key="player.id">
+                  <v-list-item-title>{{ player.name }} - {{ player.position }} - {{formatMarketValue(player.marketValue) }}</v-list-item-title>
+                  <v-list-item-action v-if="isAuthenticated">
+                    <v-btn  color="red" @click="deleteFootballPlayer(player.id)">
+                      Delete Player
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-list>
+  
+              <v-form v-if="isAuthenticated" @submit.prevent="addFootballPlayer">
+                <v-text-field v-model="newFootballPlayer.name" label="Name" required></v-text-field>
+                <v-select 
+                  v-model="newFootballPlayer.position" 
+                  :items="['Goalkeeper', 'Defender', 'Midfielder', 'Striker']" 
+                  label="Select position" 
+                  required
+                ></v-select>
+                <v-text-field 
+                  type="number" 
+                  v-model="newFootballPlayer.marketValue" 
+                  label="Market Value" 
+                  required
+                ></v-text-field>
+                <v-btn type="submit" color="green-darken-4">Add</v-btn>
+              </v-form>
+  
+              <v-btn v-if="isAuthenticated" @click="toggleEditForm" color="green-darken-4">Edit Football Club</v-btn>
+              <v-form v-if="isEditing" @submit.prevent="editFootballClub">
+                <v-text-field v-model="editedFootbalClub.clubName" label="Name" required></v-text-field>
+                <v-text-field 
+                  v-model="editedFootbalClub.clubFoundingDate" 
+                  label="Founding Date" 
+                  type="date" 
+                  required
+                ></v-text-field>
+                <v-text-field v-model="editedFootbalClub.clubLocation" label="Location" required></v-text-field>
+                <v-btn type="submit" color="green-darken-4">Save Changes</v-btn>
+              </v-form>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </template>
+  
+  
+
+
   <script>
   
   import FootbalClubService from '../services/FootbalClubService';
@@ -104,6 +172,11 @@
     this.fetchFootballPlayers();
   },
   methods: {
+    formatMarketValue(value) {
+      if(value!=null)
+        return new Intl.NumberFormat('en-US', { style: 'decimal' }).format(value) + ' $';
+      else new Intl.NumberFormat('en-US', { style: 'decimal' }).format(0) + ' $';
+  },
     toggleEditForm() {
       this.isEditing = !this.isEditing;
       this.editedFootbalClub = { ...this.footballClubDetails };
@@ -192,7 +265,7 @@
   };
   </script>
   
-  <style scoped>
+  <!-- <style scoped>
   .footballClub-details-container {
     max-width: 600px;
     margin: 0 auto;
@@ -297,4 +370,4 @@
   .add-footballPlayer-form input {
     width: auto; 
   }
-  </style>
+  </style> -->

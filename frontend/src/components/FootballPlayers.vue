@@ -7,7 +7,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col class="d-flex justify-start align-center">
+      <v-col>
         <v-select
           v-model="sortDirection"
           @change="sortPlayers"

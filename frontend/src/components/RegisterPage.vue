@@ -110,7 +110,7 @@
       <v-row justify="center" >
         <v-col cols="12" sm="10" md="8" lg="6">
           <v-card class="pa-5" elevation="2">
-            <v-card-title class="v-card-title">Register</v-card-title>
+            <v-card-title class="register">Register</v-card-title>
             <v-form @submit.prevent="register"  >
               <v-text-field 
                 v-model="name"
