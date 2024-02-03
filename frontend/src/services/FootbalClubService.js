@@ -18,4 +18,8 @@ export default {
   deleteFootbalClub(id) {
     return axios.delete(`${apiUrl}/${id}`);
   },
+  getFootbalClubByName(clubName){
+    return axios.get(`${apiUrl}/${clubName}`)
+  }
+
 };

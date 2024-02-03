@@ -30,10 +30,17 @@
                 <input placeholder="Name" v-model="newFootballPlayer.name" type="text" id="newFootballPlayerName" required>
               </div>
               <div class="form-group">
-                <input placeholder="Position" v-model="newFootballPlayer.position" type="text" id="newFootballPlayerPosition" required>
+                <select v-model="newFootballPlayer.position" id="newFootballPlayerPosition" required>
+        <option disabled value="">Select position</option>
+        <option value="Goalkeeper">Goalkeeper</option>
+        <option value="Defender">Defender</option>
+        <option value="Midfielder">Midfielder</option>
+        <option value="Striker">Striker</option>
+      </select>
               </div>
               <div class="form-group">
-                <input placeholder="marketValue" v-model="newFootballPlayer.marketValue" type="number" id="newFootballPlayerMarketValue" required>
+                <input placeholder="Market Value" v-model="newFootballPlayer.marketValue" @input="checkMarketValue" type="number" id="newFootballPlayerMarketValue" required>
+
               </div>
             </div>
             <button type="submit" class="add-btn">Add</button>
@@ -131,6 +138,7 @@
 
       // Fetch updated list of football players associated with this club
       await this.fetchFootballPlayers();
+      document.reload()
     } catch (error) {
       console.error('Error editing football club:', error);
     }
@@ -154,6 +162,7 @@
           console.error('Error deleting football player:', error);
         }
       },
+      
       
        async addFootballPlayer() {
         try {
@@ -179,6 +188,7 @@
         }
       },
     },
+    
   };
   </script>
   

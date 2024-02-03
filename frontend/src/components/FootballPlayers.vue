@@ -1,56 +1,60 @@
+
 <template>
-  <div class="footbal-players-page">
-    <h2 class="page-title">Football Players</h2>
+  <v-container class="football-players-page">
+    <v-row>
+      <v-col>
+        <h2 class="page-title">Football Players</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="d-flex justify-start align-center">
+        <v-select
+          v-model="sortDirection"
+          @change="sortPlayers"
+          :items="['asc', 'desc']"
+          label="Sort by Club name"
+          outlined
+          dense
+          class="sort-select"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        v-for="player in sortedPlayers"
+        :key="player.id"
+        cols="12" sm="6" md="4"
+      >
+        <v-card class="football-player-card" elevation="2">
+          <v-card-title class="footbalPlayerName">{{ player.name }}</v-card-title>
+          <v-card-text>
+            <div><strong>Position:</strong> {{ player.position }}</div>
+            <div><strong>Market Value:</strong> {{ formatMarketValue(player.marketValue) }}</div>
+            <div><strong>Club:</strong> {{ player.clubName }}</div>
+          </v-card-text>
+          <v-card-actions v-if="isAuthenticated">
+            <v-btn color="red" @click="deleteFootbalPlayer(player.id)" block class="delete-btn">
+              <span style="color: black; font-weight: bold;">Delete</span>
+            </v-btn>
 
-    <label for="sortDirection" class="sort-label"
-      >Sort by Club name:</label
-    >
-    <select
-      id="sortDirection"
-      v-model="sortDirection"
-      @change="sortPlayers"
-      class="sort-select"
-    >
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
-    </select>
-
-    <div class="footbal-players-container">
-        <div v-for="player in sortedPlayers" :key="player.id" class="football-player-card">
-        <div class="football-player-info">
-          <h3>{{ player.name }}</h3>
-          <p>Position: {{ player.position }}</p>
-          <p class="marketValue">Market Value: {{ player.marketValue }}</p>
-          <router-link
-            v-if="player.clubName"
-            :to="{
-              name: 'footbalClub-details',
-              params: { id: player.clubName },
-            }"
-            class="footbalClub-link"
-          >
-            Club: {{ player.clubName }}
-          </router-link>
-        </div>
-
-        <div class="football-player-actions" v-if="isAuthenticated">
-          <button @click="deleteFootbalPlayer(player.id)" class="delete-btn">
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
+
 
 <script>
 import FootbalPlayerService from "../services/FootbalPlayerService";
+import FootbalClubService from "../services/FootbalClubService";
 
 export default {
   data() {
     return {
       footballPlayers: [],
       sortDirection: "asc",
+      footballClubDetails: {}
     };
   },
   computed: {
@@ -69,6 +73,9 @@ export default {
     this.fetchFootbalPlayers();
   },
   methods: {
+    formatMarketValue(value) {
+    return new Intl.NumberFormat('en-US', { style: 'decimal' }).format(value) + ' $';
+  },
     async fetchFootbalPlayers() {
       try {
         const response = await FootbalPlayerService.getFootbalPlayers();
@@ -90,96 +97,35 @@ export default {
     sortPlayers() {
       this.sortedPlayers;
     },
+    async fetchFootballClubDetails(clubName) {
+      try {
+        const response = await FootbalClubService.getFootbalClubByName(clubName);
+        this.footballClubDetails = response.data;
+      } catch (error) {
+        console.error("Error fetching football club details:", error);
+      }
+    }
+
   },
 };
 </script>
-
 <style scoped>
-.footbal-players-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.page-title {
-  color: #333;
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-.sort-label {
-  margin-right: 10px;
-}
-
-.sort-select {
-  padding: 8px;
-}
-
-.footbal-players-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .football-player-card {
-  background-color: #f7f7f7;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin: 10px;
-  padding: 15px;
-  width: calc(33.33% - 20px);
-  box-sizing: border-box;
-  position: relative;
+  background-image: url('https://img.freepik.com/free-vector/gradient-football-field-background-with-gate_23-2149002270.jpg');
+  background-size: cover; /* Cover ensures the background covers the card area */
+  background-position: center; /* Center the background image */
+  color: white; /* Optional: Change text color for better readability */
 }
 
-.football-player-info {
-  margin-bottom: 40px;
+/* Additional styling for text to ensure it's readable over the background */
+.football-player-card .v-card-title,
+.football-player-card .v-card-text {
+  background-color: rgba(0, 0, 0, 0.5); /* Optional: Adds a slight overlay for text readability */
+  border-radius: 4px; /* Optional: Rounds the corners of the overlay */
+  padding: 4px; /* Optional: Adds some padding inside the overlay */
 }
-
-.football-player-info h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.marketValue {
-  color: #555;
-}
-
-.football-player-actions {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-a.footbalClub-link {
-  text-decoration: none;
-  font-weight: bold;
-  color: black;
-}
-
-.edit-btn,
 .delete-btn {
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.delete-btn {
-  background-color: #ff6961;
-}
-
-.edit-btn:hover,
-.delete-btn:hover {
-  background-color: #2c3e50;
-}
-
-a.footbalClub-link:hover {
-  text-decoration: none;
-  font-weight: bold;
-  color: black;
-  font-size: 17px;
+  background-color: rgb(227, 18, 18) !important; 
 }
 </style>
+

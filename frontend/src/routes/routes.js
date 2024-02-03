@@ -22,10 +22,15 @@ const routes = [
     component: Register
   },
   { 
-    path: '/footbalClub/:id', 
+    path: '/footballClub/:id', 
     component: FootbalClubsDetails, 
-    name: 'footbalClub-details' 
+    name: 'footballClub-details' 
   },
+  // { 
+  //   path: '/footballClub/:clubName', 
+  //   component: FootbalClubsDetails, 
+  //   name: 'footballClub-detailsByName' 
+  // },
   { 
     path: '/footballPlayers', 
     component: FootballPlayers, 

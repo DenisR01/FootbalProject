@@ -1,10 +1,10 @@
 \<template>
-  <div class="footbalClubs-container">
+  <div class="footballClubs-container">
     <h2>Football Clubs:</h2>
     <ul>
-      <li v-for="footbalClub in footbalClubs" :key="footbalClub.id" class="footbalClub-item">
-        <div class="footbalClub-info">
-          <router-link v-if="footbalClub.id" :to="{ name: 'footbalClub-details', params: { id: footbalClub.id }}" class="footbalClub-link">
+      <li v-for="footbalClub in footbalClubs" :key="footbalClub.id" class="footballClub-item">
+        <div class="footballClub-info">
+          <router-link v-if="footbalClub.id" :to="{ name: 'footballClub-details', params: { id: footbalClub.id }}" class="footballClub-link">
             {{footbalClub.clubName }}
           </router-link>
         </div>
@@ -15,18 +15,18 @@
     </ul>
     <form v-if="isAuthenticated && !editingFootbalClub" @submit.prevent="addFootbalClub" class="add-form">
       <div class="form-group">
-        <label for="footbalClubName">Football Club Name:</label>
-        <input v-model="newFootbalClub.clubName" type="text" id="footbalClubName" required class="name-input">
+        <label for="footballClubName">Football Club Name:</label>
+        <input v-model="newFootbalClub.clubName" type="text" id="footballClubName" required class="name-input">
       </div>
 
       <div class="form-group">
-        <label for="footbalClubFoundingDate">Founding Date:</label>
-        <input v-model="newFootbalClub.clubFoundingDate" type="date" id="footbalClubFoundingDate" required class="date-input">
+        <label for="footballClubFoundingDate">Founding Date:</label>
+        <input v-model="newFootbalClub.clubFoundingDate" type="date" id="footballClubFoundingDate" required class="date-input">
       </div>
 
       <div class="form-group">
-        <label for="footbalClubLocation">Location:</label>
-        <input v-model="newFootbalClub.clubLocation" id="footbalClubLocation" required class="location-input">
+        <label for="footballClubLocation">Location:</label>
+        <input v-model="newFootbalClub.clubLocation" id="footballClubLocation" required class="location-input">
       </div>
 
       <button type="submit" class="add-btn">Add New Football Club</button>
@@ -34,18 +34,18 @@
     
     <form v-if="isAuthenticated && editingFootbalClub" @submit.prevent="updateFootbalClub(editedFootbalClub.id)" class="add-form">
       <div class="form-group">
-        <label for="footbalClubName">Football Club Name:</label>
-        <input v-model="editedFootbalClub.clubName" type="text" id="footbalClubName" required class="name-input">
+        <label for="footballClubName">Football Club Name:</label>
+        <input v-model="editedFootbalClub.clubName" type="text" id="footballClubName" required class="name-input">
       </div>
 
       <div class="form-group">
-        <label for="footbalClubFoundingDate">Founding Date:</label>
-        <input v-model="editedFootbalClub.clubFoundingDate" type="date" id="footbalClubFoundingDate" required class="date-input">
+        <label for="footballClubFoundingDate">Founding Date:</label>
+        <input v-model="editedFootbalClub.clubFoundingDate" type="date" id="footballClubFoundingDate" required class="date-input">
       </div>
 
       <div class="form-group">
-        <label for="footbalClubLocation">Location:</label>
-        <input v-model="editedFootbalClub.clubLocation" type="text" id="footbalClubLocation" required class="location-input">
+        <label for="footballClubLocation">Location:</label>
+        <input v-model="editedFootbalClub.clubLocation" type="text" id="footballClubLocation" required class="location-input">
       </div>
 
       <button type="submit" class="add-btn" >Update Football Club</button>
@@ -53,6 +53,115 @@
 
   </div>
 </template>
+
+
+<!-- <template>
+  <v-container class="footballClubs-container">
+    <v-row>
+      <v-col cols="12">
+        <h2>Football Clubs:</h2>
+        <v-card>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item
+                v-for="footbalClub in footbalClubs"
+                :key="footbalClub.id"
+                class="footballClub-item"
+                two-line
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ footbalClub.clubName }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn icon @click="editFootbalClub(footbalClub.id)">
+                    <v-icon color="blue">mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn icon color="red" v-if="isAuthenticated" @click="deleteFootbalClub(footbalClub.id)">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+                <v-divider></v-divider>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <v-form v-if="isAuthenticated && !editingFootbalClub" @submit.prevent="addFootbalClub">
+          <v-text-field v-model="newFootbalClub.clubName" label="Football Club Name" required></v-text-field>
+          <v-text-field v-model="newFootbalClub.clubFoundingDate" label="Founding Date" type="date" required></v-text-field>
+          <v-text-field v-model="newFootbalClub.clubLocation" label="Location" required></v-text-field>
+          <v-btn color="success" dark type="submit">Add New Football Club</v-btn>
+        </v-form>
+        
+        <v-form v-if="isAuthenticated && editingFootbalClub" @submit.prevent="updateFootbalClub(editedFootbalClub.id)">
+          <v-text-field v-model="editedFootbalClub.clubName" label="Football Club Name" required></v-text-field>
+          <v-text-field v-model="editedFootbalClub.clubFoundingDate" label="Founding Date" type="date" required></v-text-field>
+          <v-text-field v-model="editedFootbalClub.clubLocation" label="Location" required></v-text-field>
+          <v-btn color="info" dark type="submit">Update Football Club</v-btn>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
+</template> -->
+
+
+<!-- <template>
+  <v-container class="footballClubs-container">
+    <v-row>
+      <v-col cols="12">
+        <h2>Football Clubs:</h2>
+        <v-card>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item
+                v-for="footballClub in footballClubs"
+                :key="footballClub.id"
+                class="footballClub-item"
+                two-line
+              >
+                <v-list-item-content>
+                  <v-list-item-title>{{ footballClub.clubName }}</v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-action>
+                  <v-btn icon @click="editFootballClub(footballClub.id)">
+                    <v-icon color="blue">mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn icon color="red" v-if="isAuthenticated" @click="deleteFootballClub(footballClub.id)">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+                <v-divider></v-divider>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <v-form v-if="isAuthenticated && !editingFootballClub" @submit.prevent="addFootballClub">
+          <v-text-field v-model="newFootballClub.clubName" label="Football Club Name" required></v-text-field>
+          <v-text-field v-model="newFootballClub.clubFoundingDate" label="Founding Date" type="date" required></v-text-field>
+          <v-text-field v-model="newFootballClub.clubLocation" label="Location" required></v-text-field>
+          <v-btn color="success" dark type="submit">Add New Football Club</v-btn>
+        </v-form>
+        
+        <v-form v-if="isAuthenticated && editingFootballClub" @submit.prevent="updateFootballClub(editedFootballClub.id)">
+          <v-text-field v-model="editedFootballClub.clubName" label="Football Club Name" required></v-text-field>
+          <v-text-field v-model="editedFootballClub.clubFoundingDate" label="Founding Date" type="date" required></v-text-field>
+          <v-text-field v-model="editedFootballClub.clubLocation" label="Location" required></v-text-field>
+          <v-btn color="info" dark type="submit">Update Football Club</v-btn>
+        </v-form>
+      </v-col>
+    </v-row>
+  </v-container>
+</template> -->
+
 
 <script>
 import FootbalClubService from '../services/FootbalClubService';
@@ -155,7 +264,7 @@ export default {
 </script>
 
 <style scoped>
-.footbalClubs-container {
+.footballClubs-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -172,7 +281,7 @@ ul {
   padding: 0;
 }
 
-.footbalClub-item {
+.footballClub-item {
   border: 1px solid #ddd;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -180,20 +289,23 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color:#1B5E20;
+  
 }
 
-.footbalClub-info {
+.footballClub-info {
   flex: 1;
 }
 
-.footbalClub-link {
+.footballClub-link {
   text-decoration: none;
-  color: #0d0e0e;
+  color: white;
   font-weight: bold;
   font-size: 16px;
+  font-weight: bold;
 }
 
-.footbalClub-link :hover {
+.footballClub-link :hover {
   font-size: 20px;
 }
 

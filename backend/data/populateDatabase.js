@@ -70,8 +70,8 @@ const generateUsers = (nrOfUsers) => {
 };
 const addData = async () => {
   const nrOfClubs = 7;
-  const nrOfPlayers = 12;
-  const nrOfUsers = 3;
+  const nrOfPlayers = 50;
+  const nrOfUsers = 2;
 
   try {
     const footbalClubs = generateFootbalClubs(nrOfClubs);
@@ -90,11 +90,11 @@ const addData = async () => {
       await footbalPlayersDocRef.set(footbalPlayer);
     }
 
-    // const usersCollectionRef = db.collection('users');
-    // for (const user of users) {
-    //   const userDocRef = usersCollectionRef.doc();
-    //   await userDocRef.set(user);
-    // }
+    const usersCollectionRef = db.collection('users');
+    for (const user of users) {
+      const userDocRef = usersCollectionRef.doc();
+      await userDocRef.set(user);
+    }
 
     console.log('Data added successfully.');
   } catch (error) {

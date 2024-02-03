@@ -43,6 +43,37 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/:clubName', async (req, res) => {
+  try {
+    const footbalClubName = req.params.clubName;
+    const footbalClubDocs = await db.collection('footbalClubs').doc().get(); //ista cu totate cluburile
+    const neededClubName = {};
+    for(let club of footbalClubDocs) {
+      if (club.clubName !==footbalClubName) {
+        return res.status(404).send('footbal Club not found!!');
+      }
+      else{
+          neededClubName = club;
+      }
+
+    }
+    // if (!footbalClubDoc.exists) {
+    //   return res.status(404).send('footbal Club not found!!');
+    // }
+
+    // const footbalClubData = {
+    //   clubName : neededClubName.clubName,
+    //   ...neededClubName.data()
+    // };
+    if(neededClubName !== null  )
+      res.json(neededClubName);
+  } catch (error) {
+    console.error('Error getting footbal club  by name:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 router.post('/', verifyToken, async(req,res)=> {
   try{
     let docRef=db.collection('footbalClubs').doc();
@@ -97,7 +128,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     footbalPlayerSnapshot.forEach((doc)=> {
       updatedPromises.push(doc.ref.update({
         clubId: null,
-        clubName: null,
+        clubName: 'Free agent',
         clubFoundingDate: null,
         clubLocation: null
       }));
