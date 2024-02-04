@@ -6,6 +6,9 @@ export default {
   getFootbalPlayers() {
     return axios.get(apiUrl);
   },
+  getPlayersByClubId(clubid){
+    return axios.get(apiUrl, { params: { clubid } });
+  },
   getFootbalPlayer(id){
     return axios.get(`${apiUrl}/${id}`)
   },

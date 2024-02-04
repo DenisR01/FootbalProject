@@ -61,7 +61,7 @@ const generateUsers = (nrOfUsers) => {
       const user = {
         name: chance.name(),
         email: chance.email(),
-        password: 'password'  // Consider using chance.string() for random passwords
+        password: 'password' 
       };
       users.push(user);
     }

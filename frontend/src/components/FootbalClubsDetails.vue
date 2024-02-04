@@ -189,33 +189,20 @@
         console.error('Error fetching football club:', error);
       }
     },
-    // async editFootballClub() {
-    //   const footballClubId = this.$route.params.id;
-    //   try {
-    //     await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
-    //     this.isEditing = false; 
-    //     this.fetchFootballClubDetails(footballClubId);
-    //   } catch (error) {
-    //     console.error('Error editing football club:', error);
-    //   }
-    // },
-      async editFootballClub() {
-    const footballClubId = this.$route.params.id;
-    try {
-      await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
-      this.isEditing = false;
-      this.footballClubDetails = { ...this.editedFootbalClub };
 
-      // Fetch updated football club details
-      await this.fetchFootballClubDetails(footballClubId);
+async editFootballClub() {
+  console.log("INSIDE EDIT FC");
+  const footballClubId = this.$route.params.id;
+  try {
+    // Attempt to update the football club's details
+    await FootbalClubService.editFootbalClub(footballClubId, this.editedFootbalClub);
+    this.footballClubDetails = {...this.editedFootbalClub};
+    console.log(footballClubId, "EDITED FC", this.editedFootballClub);
+  } catch (error) {
+    console.error('Error editing football club:', error);
+  }
+},
 
-      // Fetch updated list of football players associated with this club
-      await this.fetchFootballPlayers();
-      document.reload()
-    } catch (error) {
-      console.error('Error editing football club:', error);
-    }
-  },
 
     async fetchFootballPlayers() {
         try {
@@ -235,32 +222,54 @@
           console.error('Error deleting football player:', error);
         }
       },
+      async updatePlayersForClub(clubId, updatedClub) {
+  try {
+    // Step 1: Fetch players associated with the specified clubId
+    const response = await FootbalPlayerService.getPlayersByClubId(clubId);
+    const playersToUpdate = response.data;
+
+    // Step 2: Update each player with the new club information
+    for (const player of playersToUpdate) {
+      const updatedPlayerData = {
+        ...player,
+        clubName: updatedClub.clubName,
+        clubFoundingDate: updatedClub.clubFoundingDate,
+        clubLocation: updatedClub.clubLocation,
+      };
+
+      // Step 3: Call the API to update the player
+      await FootbalPlayerService.editFootbalPlayer(player.id, updatedPlayerData);
+    }
+  } catch (error) {
+    console.error('Error updating players:', error);
+  }
+},
       
       
-       async addFootballPlayer() {
-        try {
-          const footbalClubId = this.$route.params.id;
-          const response = await FootbalPlayerService.addFootbalPlayer({
-            name: this.newFootballPlayer.name,
-            position: this.newFootballPlayer.position,
-            marketValue: this.newFootballPlayer.marketValue,
-            clubId: footbalClubId
-          });
-          const newFootballPlayer = response.data;
-          this.footbalPlayers.push(newFootballPlayer);
-          this.newFootballPlayer = {
-            name: '',
-            position: '',
-            marketValue: 0,
-          };
-          
-          this.fetchFootballPlayers();
+async addFootballPlayer() {
+try {
+  const footbalClubId = this.$route.params.id;
+  const response = await FootbalPlayerService.addFootbalPlayer({
+    name: this.newFootballPlayer.name,
+    position: this.newFootballPlayer.position,
+    marketValue: this.newFootballPlayer.marketValue,
+    clubId: footbalClubId
+  });
+  const newFootballPlayer = response.data;
+  this.footbalPlayers.push(newFootballPlayer);
+  this.newFootballPlayer = {
+    name: '',
+    position: '',
+    marketValue: 0,
+  };
   
-        } catch (error) {
-          console.error('Error adding football player:', error);
-        }
-      },
-    },
+  this.fetchFootballPlayers();
+
+} catch (error) {
+  console.error('Error adding football player:', error);
+}
+},
+},
     
   };
   </script>

@@ -97,27 +97,47 @@ router.post('/', verifyToken, async(req,res)=> {
   }
 })
 
-router.put('/:id', verifyToken, async(req,res)=> {
-  try{
+router.put('/:id', verifyToken, async (req, res) => {
+  try {
     const id = req.params.id;
     let docRef = db.collection('footbalClubs').doc(id);
+    let docRefPlayers = db.collection('footbalPlayers');
 
-    if(!req.body.clubName || !req.body.clubFoundingDate || !req.body.clubLocation) {
-      res.json({message:'Footbal Club must contain all data.'})
+    if (!req.body.clubName || !req.body.clubFoundingDate || !req.body.clubLocation) {
+      res.json({ message: 'Footbal Club must contain all data.' });
     }
 
+    // Update the club data in the 'footbalClubs' collection
     await docRef.update({
       clubName: req.body.clubName,
       clubFoundingDate: req.body.clubFoundingDate,
       clubLocation: req.body.clubLocation
-    })
+    });
 
-    
-  } catch(error){
-    console.error('Unable to update the footbal club:', error);
-    res.status(500).send('Unable to update the footbal club.');
+    // Update all players associated with the club in the 'footbalPlayers' collection
+    const playersSnapshot = await docRefPlayers.where('clubId', '==', id).get();
+    const batch = db.batch();
+
+    playersSnapshot.forEach((playerDoc) => {
+      const playerRef = docRefPlayers.doc(playerDoc.id);
+      batch.update(playerRef, {
+        clubName: req.body.clubName,
+        clubFoundingDate: req.body.clubFoundingDate,
+        clubLocation: req.body.clubLocation
+      });
+    });
+
+    await batch.commit();
+
+    console.log('CLUB AND PLAYERS UPDATED');
+    res.json({ message: 'Club and players updated successfully.' });
+
+  } catch (error) {
+    console.error('Unable to update the footbal club and players:', error);
+    res.status(500).send('Unable to update the footbal club and players.');
   }
-})
+});
+
 
 router.delete('/:id', verifyToken, async (req, res) => {
   try {

@@ -1,4 +1,3 @@
-
 <template>
   <v-container class="football-players-page">
     <v-row>

@@ -13,6 +13,7 @@ export default {
     return axios.post(apiUrl, newFootbalClub);
   },
   editFootbalClub(id, modifiedFootbalClub) {
+    
     return axios.put(`${apiUrl}/${id}`, modifiedFootbalClub);
   },
   deleteFootbalClub(id) {

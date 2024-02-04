@@ -100,25 +100,6 @@
           ></v-text-field>
           <v-btn type="submit" color="green darken-4">Add New Football Club</v-btn>
         </v-form>
-        <v-form v-if="isAuthenticated && editingFootbalClub" @submit.prevent="updateFootbalClub(editedFootbalClub.id)">
-          <v-text-field
-            v-model="editedFootbalClub.clubName"
-            label="Football Club Name"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="editedFootbalClub.clubFoundingDate"
-            label="Founding Date"
-            type="date"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="editedFootbalClub.clubLocation"
-            label="Location"
-            required
-          ></v-text-field>
-          <v-btn type="submit" color="primary">Update Football Club</v-btn>
-        </v-form>
       </v-col>
     </v-row>
   </v-container>
@@ -156,6 +137,14 @@ export default {
     this.loadFootbalClubs();
   },
   methods: {
+
+    resetNewFootbalClub() {
+      this.newFootbalClub = {
+        clubName: '',
+        clubFoundingDate: null,
+        clubLocation: '',
+      };
+    },
     async loadFootbalClubs() {
       try {
         const response = await FootbalClubService.getFootbalClubs();
@@ -184,67 +173,11 @@ export default {
         console.error('Error adding footbal club:', error);
       }
     },
-
-     async editFootbalClub(id) {
-      try {
-        const response = await FootbalClubService.getFootbalClub(id);
-        this.editingFootbalClub = true;
-        this.editedFootbalClub = response.data;
-      } catch (error) {
-        console.error('Error fetching football club  for editing:', error);
-      }
-    },
-
-    async updateFootbalClub(id) {
-      try {
-        const response = await FootbalClubService.editFootbalClub(id, this.editedFootbalClub);
-        const editedFootbalClub = response;
-        this.footbalClubs.push(editedFootbalClub);
-        this.loadFootbalClubs();
-        this.cancelEdit();
-      } catch (error) {
-        console.error('Error updating footbal club:', error);
-      }
-},
-
-    cancelEdit() {
-      this.editingFootbalClub = false;
-      this.editedFootbalClub = {
-        clubName: '',
-        clubFoundingDate: null,
-        clubLocation: '',
-      };
-    },
-
-    resetNewFootbalClub() {
-      this.newFootbalClub = {
-        clubName: '',
-        clubFoundingDate: null,
-        clubLocation: '',
-      };
-    },
   },
 };
 </script>
 
 <style scoped>
-/* .footballClubs-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h2 {
-  color: #333;
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-} */
-
 .footballClub-item {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -256,11 +189,6 @@ ul {
   background-color:#1B5E20;
   
 }
-
-/* .footballClub-info {
-  flex: 1;
-} */
-
 .footballClub-link {
   text-decoration: none;
   color: white;
@@ -271,73 +199,5 @@ ul {
 
 .footballClub-link :hover {
   font-size: 20px;
-}
-/* 
-.buttons-container {
-  display: flex;
-  gap: 10px;
-} */
-
-/* .edit-btn,
-.delete-btn {
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-} */
-
-/* .delete-btn {
-  background-color: #ff6961;
-}
-
-.edit-btn:hover,
-.delete-btn:hover {
-  background-color: #2c3e50;
-}
-
-.add-form {
-  margin-top: 20px;
-  display: flex;
-  flex-wrap: wrap; 
-}
-
-.form-group {
-  margin-right: 10px; 
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
-}
-
-input {
-  width: 200px; 
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add-btn {
-  background-color: #2ecc71;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-btn:hover {
-  background-color: #27ae60;
-}
-
-.name-input,
-.location-input, */
-.date-input {
-  margin-bottom: 15px;
 }
 </style>
