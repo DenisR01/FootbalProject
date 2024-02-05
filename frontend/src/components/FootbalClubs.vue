@@ -1,58 +1,3 @@
-<!-- \<template>
-  <div class="footballClubs-container">
-    <h2>Football Clubs:</h2>
-    <ul>
-      <li v-for="footbalClub in footbalClubs" :key="footbalClub.id" class="footballClub-item">
-        <div class="footballClub-info">
-          <router-link v-if="footbalClub.id" :to="{ name: 'footballClub-details', params: { id: footbalClub.id }}" class="footballClub-link">
-            {{footbalClub.clubName }}
-          </router-link>
-        </div>
-        <div class="buttons-container">
-          <button v-if="isAuthenticated" @click="deleteFootbalClub(footbalClub.id)" class="delete-btn">Delete</button>
-        </div>
-      </li>
-    </ul>
-    <form v-if="isAuthenticated && !editingFootbalClub" @submit.prevent="addFootbalClub" class="add-form">
-      <div class="form-group">
-        <label for="footballClubName">Football Club Name:</label>
-        <input v-model="newFootbalClub.clubName" type="text" id="footballClubName" required class="name-input">
-      </div>
-
-      <div class="form-group">
-        <label for="footballClubFoundingDate">Founding Date:</label>
-        <input v-model="newFootbalClub.clubFoundingDate" type="date" id="footballClubFoundingDate" required class="date-input">
-      </div>
-
-      <div class="form-group">
-        <label for="footballClubLocation">Location:</label>
-        <input v-model="newFootbalClub.clubLocation" id="footballClubLocation" required class="location-input">
-      </div>
-
-      <button type="submit" class="add-btn">Add New Football Club</button>
-    </form>
-    
-    <form v-if="isAuthenticated && editingFootbalClub" @submit.prevent="updateFootbalClub(editedFootbalClub.id)" class="add-form">
-      <div class="form-group">
-        <label for="footballClubName">Football Club Name:</label>
-        <input v-model="editedFootbalClub.clubName" type="text" id="footballClubName" required class="name-input">
-      </div>
-
-      <div class="form-group">
-        <label for="footballClubFoundingDate">Founding Date:</label>
-        <input v-model="editedFootbalClub.clubFoundingDate" type="date" id="footballClubFoundingDate" required class="date-input">
-      </div>
-
-      <div class="form-group">
-        <label for="footballClubLocation">Location:</label>
-        <input v-model="editedFootbalClub.clubLocation" type="text" id="footballClubLocation" required class="location-input">
-      </div>
-
-      <button type="submit" class="add-btn" >Update Football Club</button>
-    </form>
-
-  </div>
-</template> -->
 <template>
   <v-container fluid>
     <v-row justify="center">
@@ -137,7 +82,7 @@ export default {
     this.loadFootbalClubs();
   },
   methods: {
-
+   
     resetNewFootbalClub() {
       this.newFootbalClub = {
         clubName: '',

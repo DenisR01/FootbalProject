@@ -3,7 +3,6 @@ const router = express.Router();
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const uuid = require('uuid');
 const {validateRegister} = require('../forAuthentifications/authentificationRequirements.js')
 
 const db = admin.firestore();
@@ -33,7 +32,7 @@ router.post('/register', validateRegister, async(req,res) => {
 });
 
 router.post('/login', async(req, res)=>{
-  const { name,email, password } = req.body;
+  const {email, password } = req.body;
 
   try {
     const docRef = db.collection('users');

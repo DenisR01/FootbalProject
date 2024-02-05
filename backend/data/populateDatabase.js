@@ -7,7 +7,7 @@ const generateFootbalClubs = (nrOfClubs) => {
   const prefixes = ['FC', 'Real', 'AC', 'Sporting', 'United', 'City', 'Rovers', 'Dynamo', 'Galaxy', 'Racing', 'Wanderers', 'Rangers', 'Dynamo', 'City', 'United', 'Club', 'Athletic', 'FC'];
 
   for (let i = 0; i < nrOfClubs; i++) {
-    const clubId = chance.guid();  // chance.guid() for UUID
+    const clubId = chance.guid();
     const prefix = chance.pickone(prefixes);
     const city = chance.city();
     const maxDate = new Date(2010, 11, 31); 
@@ -16,7 +16,7 @@ const generateFootbalClubs = (nrOfClubs) => {
     const club = {
         clubId: clubId,
         clubName: `${prefix} ${city}`,
-        clubFoundingDate: formattedDate, // Returns date in YYYY-MM-DD format
+        clubFoundingDate: formattedDate, 
         clubLocation: city
     };
     

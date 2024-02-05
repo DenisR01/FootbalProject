@@ -26,11 +26,7 @@ const routes = [
     component: FootbalClubsDetails, 
     name: 'footballClub-details' 
   },
-  // { 
-  //   path: '/footballClub/:clubName', 
-  //   component: FootbalClubsDetails, 
-  //   name: 'footballClub-detailsByName' 
-  // },
+  
   { 
     path: '/footballPlayers', 
     component: FootballPlayers, 

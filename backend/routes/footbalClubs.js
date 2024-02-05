@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
     const footbalClubData = {
       id: footbalClubDoc.id,
-      ...footbalClubDoc.data()
+      ...footbalClubDoc.data(),
     };
 
     res.json(footbalClubData);
@@ -42,37 +42,6 @@ router.get('/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-router.get('/:clubName', async (req, res) => {
-  try {
-    const footbalClubName = req.params.clubName;
-    const footbalClubDocs = await db.collection('footbalClubs').doc().get(); //ista cu totate cluburile
-    const neededClubName = {};
-    for(let club of footbalClubDocs) {
-      if (club.clubName !==footbalClubName) {
-        return res.status(404).send('footbal Club not found!!');
-      }
-      else{
-          neededClubName = club;
-      }
-
-    }
-    // if (!footbalClubDoc.exists) {
-    //   return res.status(404).send('footbal Club not found!!');
-    // }
-
-    // const footbalClubData = {
-    //   clubName : neededClubName.clubName,
-    //   ...neededClubName.data()
-    // };
-    if(neededClubName !== null  )
-      res.json(neededClubName);
-  } catch (error) {
-    console.error('Error getting footbal club  by name:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
 
 router.post('/', verifyToken, async(req,res)=> {
   try{
@@ -86,7 +55,7 @@ router.post('/', verifyToken, async(req,res)=> {
       clubId: docRef.id,
       clubName: req.body.clubName,
       clubFoundingDate: req.body.clubFoundingDate,
-      clubLocation: req.body.clubLocation
+      clubLocation: req.body.clubLocation,
     })
 
     res.json({message: 'Footbal Club added successfully'});
