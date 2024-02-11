@@ -1,4 +1,4 @@
-This application was created using JavaScript for both the backend and frontend, with Express and Node.js for the backend, and Vue.js for the frontend. The database is Firebase. Chance.js was used to create a script that populates the database with random information. The application is a Single Page Application with CRUD operations for related objects.
+This application was created using JavaScript for both the backend and frontend, with Express and Node.js for the backend, and Vue.js for the frontend. The database is Firebase , an NoSQL database. Chance.js was used to create a script that populates the database with random information. The application is a Single Page Application with CRUD operations for related objects.
 
 Other technologies used:
 
